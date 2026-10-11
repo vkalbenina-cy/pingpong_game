@@ -27,14 +27,18 @@ class GameSprite(sprite.Sprite):
         window.blit(self.image, (self.rect.x, self.rect.y))
       
 class Player(GameSprite):
-  def key_down(self):
+  def key_first_player(self):
     keys = key.get_pressed()
-    if keys[K_DOWN]:
+    if keys[K_DOWN] and self.rect.y < 500:
           self.rect.y += self.speed
-  def key_up(self):
-    keys = key.get_pressed()
-    if keys[K_UP]:
+    if keys[K_UP]and self.rect.y > 1:
           self.rect.y -= self.speed
+  def key_second_player(self):
+    keys = key.get_pressed()
+    if keys[K_s] and self.rect.y < 500:
+        self.rect.y += self.speed
+    if keys[K_w] and self.rect.y > 2:
+        self.rect.y -= self.speed
 tenis_ball = GameSprite('blueberry.png', 100, 100, 100, 100, 5)
 racket1 = Player('racket.png', 20, 20, 25, 100, 5)
 racket2 = Player('racket.png', 650, 20, 25, 100, 5)
