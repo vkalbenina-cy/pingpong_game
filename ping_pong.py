@@ -1,23 +1,20 @@
 from pygame import *
-
-window = display.set_mode(800, 600)
+font.init()
+from random import randint
 display.set_caption('Пинг-понг')
-back = ()
-win_width = 700
-win_height = 600
-window = display.set_mode(win_width, win_height)
-window.fill(back)
+window = display.set_mode((700, 600))
+background = transform.scale(image.load('green.jpg'), (700, 600))
 
+sprites_ball = ['blueberry.png', 'toast.png', 'orange.png', 'apple.png']
 class GameSprite(sprite.Sprite):
   # конструктор класса
-    def __init__(self, player_image, player_x, player_y, size_x, size_y, player_speed):
+    def __init__(self, player_image, player_x, player_y, size_x, size_y, player_speed_x, player_speed_y):
         # Вызываем конструктор класса (Sprite):
         sprite.Sprite.__init__(self)
-
         # каждый спрайт должен хранить свойство image - изображение
         self.image = transform.scale(image.load(player_image), (size_x, size_y))
-        self.speed = player_speed
-
+        self.speed_x = player_speed_x
+        self.speed_y = player_speed_y
         # каждый спрайт должен хранить свойство rect - прямоугольник, в который он вписан
         self.rect = self.image.get_rect()
         self.rect.x = player_x
@@ -26,22 +23,27 @@ class GameSprite(sprite.Sprite):
     def reset(self):
         window.blit(self.image, (self.rect.x, self.rect.y))
       
+
 class Player(GameSprite):
   def key_first_player(self):
     keys = key.get_pressed()
     if keys[K_DOWN] and self.rect.y < 500:
-          self.rect.y += self.speed
+          self.rect.y += self.speed_y
     if keys[K_UP]and self.rect.y > 1:
-          self.rect.y -= self.speed
+          self.rect.y -= self.speed_y
   def key_second_player(self):
     keys = key.get_pressed()
     if keys[K_s] and self.rect.y < 500:
-        self.rect.y += self.speed
+        self.rect.y += self.speed_y
     if keys[K_w] and self.rect.y > 2:
-        self.rect.y -= self.speed
-tenis_ball = GameSprite('blueberry.png', 100, 100, 100, 100, 5)
-racket1 = Player('racket.png', 20, 20, 25, 100, 5)
-racket2 = Player('racket.png', 650, 20, 25, 100, 5)
+        self.rect.y -= self.speed_y
+ball = GameSprite(sprites_ball[randint(0, 3)], 120, 300, 100, 100, 3, 3)
+racket1 = Player('racket.png', 650, 300, 25, 100, 5, 5)
+racket2 = Player('racket.png', 20, 300, 25, 100, 5, 5)
+
+font = font.Font(None, 70)
+lose1 = font.render('FIRST PLAYER LOSE!', True, (255, 215, 0))
+lose2 = font.render('SECOND PLAYER LOSE!', True, (255, 215, 0))
 
 FPS = 60
 clock = time.Clock()
@@ -50,7 +52,7 @@ finish = False
 ball.speed_x = 3
 ball.speed_y = 3
 while game:
-    window.blit(my_surface, (0, 0))
+    window.blit(background, (0, 0))
     clock.tick(FPS)
     for e in event.get():
         if e.type == QUIT:
