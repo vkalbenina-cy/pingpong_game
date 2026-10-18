@@ -47,6 +47,8 @@ FPS = 60
 clock = time.Clock()
 game = True
 finish = False
+ball.speed_x = 3
+ball.speed_y = 3
 while game:
     window.blit(my_surface, (0, 0))
     clock.tick(FPS)
@@ -60,22 +62,23 @@ while game:
       racket1.key_first_player()
       racket2.key_second_player()
 
-      ball.rect.x += ball.speed
-      ball.rect.y += ball.speed
+      ball.rect.x += ball.speed_x
+      ball.rect.y += ball.speed_y
 
       if sprite.collide_rect(ball, racket1) or sprite.collide_rect(ball, racket2):
-        ball.rect.x *= -1
-        ball.rect.y *= -1
-      if ball.rect.y == 100 or ball.rect.y == 500:
-        ball.rect.x += ball.speed
-        ball.rect.y += ball.speed
+        ball.speed_x *= -1
+        
 
-      # if ball.rect.x <= 100:
-      #   window.blit(lose1, (60, 100))
-      # elif ball.rect.x >= 600:
-      #   window.blit(lose2, (60, 100))
+      if ball.rect.y < 0 or ball.rect.y > 510:
+          ball.speed_y *= -1 
+
+      if ball.rect.x <= 0:
+        window.blit(lose1, (60, 100))
+      if ball.rect.x >= 690:
+        window.blit(lose2, (60, 100))
+        
         
     display.update()
-    window.fill(back)
+    window.blit(background, (0, 0))
 display.update()
 
